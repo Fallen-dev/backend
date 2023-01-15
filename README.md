@@ -19,10 +19,15 @@ Clone it
 ```bash
 git clone https://github.com/Fallen-dev/backend.git && cd backend
 ```
-start the project
+Run the project
 ```bash
 npm start
 ```
+For unit testing
+```bash
+npm test
+```
+
 Open the url `http://localhost:1630` in browser
 
 Use `http://localhost:1630/<name>` to get user's details and `http://localhost:1630/repos/<name>` to get the repositories.

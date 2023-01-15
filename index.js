@@ -1,6 +1,5 @@
 const express = require('express')
 const axios = require('axios')
-const reuqest = require('supertest')
 
 const app = express()
 const port = 1630
@@ -9,9 +8,7 @@ const url = 'https://api.github.com/users/'
 
 
 app.get('/', (_, res) => {
-  res.send(
-    `<h1>Use url/:name to get response</h1>`
-  )
+  res.json({message: 'Route not found. Please use /<name> to get details of the specified user and /repos/<name> to get the repositories of that user.'})
 })
 
 app.get('/:name', async (req, res) => {
@@ -52,27 +49,6 @@ app.get('/repos/:name', async (req, res) => {
   })
 })
 
-reuqest(app)
-.get(`/fallen-dev`)
-.expect(200)
-.end((error) => {
-  if (error) {
-    console.error('### SUPERTEST in `/`: ❎ Test failed')
-    throw error
-  }
-  console.log('### SUPERTEST in `/`: ✅ Test passed')
-})
-
-reuqest(app)
-.get(`/repos/fallen-dev`)
-.expect(200)
-.end((error) => {
-  if (error) {
-    console.error('### SUPERTEST in `/repos`: ❎ Test failed')
-    throw error
-  }
-  console.log('### SUPERTEST in `/repos`: ✅ Test passed')
-})
 
 
 app.listen(port, () => console.log(`Server started at http://localhost:${port}`))
@@ -89,3 +65,5 @@ function getData(array) {
     open_issues: open_issues_count
   }
 }
+
+module.exports = app
