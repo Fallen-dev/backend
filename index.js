@@ -1,5 +1,6 @@
 const express = require('express')
 const axios = require('axios')
+const reuqest = require('supertest')
 
 const app = express()
 const port = 1630
@@ -14,9 +15,7 @@ app.get('/', (_, res) => {
 })
 
 app.get('/:name', async (req, res) => {
-  axios.get(url + req.params.name, {
-    validateStatus: (status) => status < 500
-  })
+  axios.get(url + req.params.name)
   .then(raw => res.json({
     name: raw.data.login,
     img: raw.data.avatar_url,
@@ -29,6 +28,15 @@ app.get('/:name', async (req, res) => {
     following: raw.data.following,
     location: raw.data.location
   }))
+  .catch(e => {
+    res.json({
+      status: e.message.replace(/^\D+/, ''),
+      message: 'failed',
+      custom_message: 'That user doesn\'t exist',
+      error: e
+      })
+    res.status(400)
+  })
 })
 
 app.get('/repos/:name', async (req, res) => {
@@ -38,11 +46,34 @@ app.get('/repos/:name', async (req, res) => {
     res.json({
       status: e.message.replace(/^\D+/, ''),
       message: e.message,
-      custom_message: 'That user does\'nt exist'
+      custom_message: 'That user doesn\'t exist'
       })
     res.status(400)
   })
 })
+
+reuqest(app)
+.get(`/fallen-dev`)
+.expect(200)
+.end((error) => {
+  if (error) {
+    console.error('### SUPERTEST in `/`: ❎ Test failed')
+    throw error
+  }
+  console.log('### SUPERTEST in `/`: ✅ Test passed')
+})
+
+reuqest(app)
+.get(`/repos/fallen-dev`)
+.expect(200)
+.end((error) => {
+  if (error) {
+    console.error('### SUPERTEST in `/repos`: ❎ Test failed')
+    throw error
+  }
+  console.log('### SUPERTEST in `/repos`: ✅ Test passed')
+})
+
 
 app.listen(port, () => console.log(`Server started at http://localhost:${port}`))
 
