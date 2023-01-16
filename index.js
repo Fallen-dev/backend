@@ -12,7 +12,12 @@ app.get('/', (_, res) => {
 })
 
 app.get('/:name', async (req, res) => {
-  axios.get(url + req.params.name)
+  axios.get(url + req.params.name, {
+    headers: {
+      'access-control-allow-origin': '*',
+      'access-control-expose-headers': '*'
+    }
+  })
   .then(raw => res.json({
     name: raw.data.login,
     img: raw.data.avatar_url,
@@ -37,7 +42,12 @@ app.get('/:name', async (req, res) => {
 })
 
 app.get('/repos/:name', async (req, res) => {
-  axios.get(url + req.params.name + '/repos')
+  axios.get(url + req.params.name + '/repos', {
+    headers: {
+      'access-control-allow-origin': '*',
+      'access-control-expose-headers': '*'
+    }
+  })
   .then(raw => res.json(raw.data.map(getData)))
   .catch(e => {
     res.json({
