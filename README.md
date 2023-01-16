@@ -1,6 +1,8 @@
 # Backend
 An rest Api that calls GitHub's Api.
 
+**API live at https://victorious-lime-sari.cyclic.app**
+
 ### Usage
 This Api has only two endpoints.
 | Endpoint | Description |
@@ -27,6 +29,8 @@ For unit testing
 ```bash
 npm test
 ```
+
+See `test.js` file for unit testing
 
 Open the url `http://localhost:1630` in browser
 

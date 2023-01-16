@@ -32,13 +32,12 @@ app.get('/:name', async (req, res) => {
     location: raw.data.location
   }))
   .catch(e => {
-    res.json({
-      status: e.message.replace(/^\D+/, ''),
-      message: 'failed',
-      custom_message: 'That user doesn\'t exist',
-      error: e
-      })
-    res.status(400)
+    const status = e.message.replace(/^\D+/, '')
+    res.status(+status).json({
+    status: status,
+    message: e.message,
+    custom_message: 'That user doesn\'t exist',
+    })
   })
 })
 
@@ -46,12 +45,12 @@ app.get('/repos/:name', async (req, res) => {
   axios.get(url + req.params.name + '/repos')
   .then(raw => res.json(raw.data.map(getData)))
   .catch(e => {
-    res.json({
-      status: e.message.replace(/^\D+/, ''),
+    const status = e.message.replace(/^\D+/, '')
+    res.status(+status).json({
+      status: status,
       message: e.message,
       custom_message: 'That user doesn\'t exist'
-      })
-    res.status(400)
+    })
   })
 })
 
