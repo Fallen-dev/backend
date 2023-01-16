@@ -6,18 +6,19 @@ const port = 1630
 
 const url = 'https://api.github.com/users/'
 
+app.use((_, res, next) => {
+    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Methods', 'GET');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.get('/', (_, res) => {
   res.json({message: 'Route not found. Please use /<name> to get details of the specified user and /repos/<name> to get the repositories of that user.'})
 })
 
 app.get('/:name', async (req, res) => {
-  axios.get(url + req.params.name, {
-    headers: {
-      'access-control-allow-origin': '*',
-      'access-control-expose-headers': '*'
-    }
-  })
+  axios.get(url + req.params.name)
   .then(raw => res.json({
     name: raw.data.login,
     img: raw.data.avatar_url,
@@ -42,12 +43,7 @@ app.get('/:name', async (req, res) => {
 })
 
 app.get('/repos/:name', async (req, res) => {
-  axios.get(url + req.params.name + '/repos', {
-    headers: {
-      'access-control-allow-origin': '*',
-      'access-control-expose-headers': '*'
-    }
-  })
+  axios.get(url + req.params.name + '/repos')
   .then(raw => res.json(raw.data.map(getData)))
   .catch(e => {
     res.json({
